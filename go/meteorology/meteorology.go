@@ -1,5 +1,7 @@
 package meteorology
 
+import "fmt"
+
 type TemperatureUnit int
 
 const (
@@ -8,6 +10,12 @@ const (
 )
 
 // Add a String method to the TemperatureUnit type
+func (u TemperatureUnit) String() string {
+    if u == Celsius {
+        return "°C"
+    }
+    return "°F"
+}
 
 type Temperature struct {
 	degree int
@@ -15,6 +23,10 @@ type Temperature struct {
 }
 
 // Add a String method to the Temperature type
+func (t Temperature) String() string {
+    return fmt.Sprintf("%v %v", t.degree, t.unit)
+}
+
 
 type SpeedUnit int
 
@@ -24,6 +36,12 @@ const (
 )
 
 // Add a String method to SpeedUnit
+func (u SpeedUnit) String() string {
+    if u ==  KmPerHour {
+        return "km/h"
+    }
+    return "mph"
+}
 
 type Speed struct {
 	magnitude int
@@ -31,6 +49,9 @@ type Speed struct {
 }
 
 // Add a String method to Speed
+func (s Speed) String() string {
+    return fmt.Sprintf("%v %v", s.magnitude, s.unit)
+}
 
 type MeteorologyData struct {
 	location      string
@@ -41,3 +62,11 @@ type MeteorologyData struct {
 }
 
 // Add a String method to MeteorologyData
+func (md MeteorologyData) String() string {
+    return fmt.Sprintf("%s: %s, Wind %s at %s, %d%% Humidity",
+        md.location,
+        md.temperature.String(), // Nutzt die String-Methode von Temperature
+        md.windDirection,
+        md.windSpeed.String(), // Nutzt die String-Methode von Speed
+        md.humidity)
+}
