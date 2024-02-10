@@ -1,21 +1,51 @@
 package parsinglogfiles
 
+import "regexp"
+
 func IsValidLine(text string) bool {
-	panic("Please implement the IsValidLine function")
+    foo := regexp.MustCompile(`^\[(TRC|DBG|INF|WRN|ERR|FTL)\]`)
+    return foo.MatchString(text)
 }
 
 func SplitLogLine(text string) []string {
-	panic("Please implement the SplitLogLine function")
+    return regexp.MustCompile(`<[~*=-]*>`).Split(text, -1)
 }
 
 func CountQuotedPasswords(lines []string) int {
-	panic("Please implement the CountQuotedPasswords function")
+    pattern := `"(?i).*password.*"`
+    re := regexp.MustCompile(pattern)
+
+    count := 0
+    for _, line := range lines {
+        if re.FindString(line) != "" {
+            count++
+        }
+    }
+    return count
 }
 
 func RemoveEndOfLineText(text string) string {
-	panic("Please implement the RemoveEndOfLineText function")
+    re := regexp.MustCompile(`end-of-line\d+`)
+    cleanedText := re.ReplaceAllString(text, "")
+    return cleanedText
 }
 
 func TagWithUserName(lines []string) []string {
-	panic("Please implement the TagWithUserName function")
+    re := regexp.MustCompile(`User\s+(\S+)`)
+    var result []string
+
+    for _, line := range lines {
+        match := re.FindStringSubmatch(line)
+        if match != nil {
+            // Füge [USR] und den Benutzernamen am Anfang der Zeile ein
+            taggedLine := "[USR] " + match[1] + " " + line
+            result = append(result, taggedLine)
+        } else {
+            // Füge die unveränderte Zeile hinzu, wenn kein Benutzername gefunden wurde
+            result = append(result, line)
+        }
+    }
+
+    return result
 }
+
