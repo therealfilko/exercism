@@ -6,10 +6,11 @@ import (
 
 func Convert(number int) string {
     foo := map[int]string{ 3: "Pling", 5: "Plang", 7: "Plong"}
+    bar := []int{3, 5, 7}
     result := ""
-    for teiler, klang := range foo {
+    for _, teiler := range bar {
         if number % teiler == 0 {
-            result += klang
+            result += foo[teiler]
         } 
     }
     if len(result) == 0 {
