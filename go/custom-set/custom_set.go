@@ -1,6 +1,9 @@
 package stringset
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 // Implement Set as a collection of unique string values.
 //
@@ -26,55 +29,94 @@ func NewFromSlice(l []string) Set {
     return mySet
 }
 
-// muss schauen wie wir das machen
-// string muss { elment1, element2 } ausgeben
-// vielleicht len - 1 um die länge zu haben minus eins und so oft durch gehen 
-// mit einer schleife und letzte ist dann halt ohne komma
 func (s Set) String() string {
-    var builder strings.Builder
-    builder.WriteString("{")
+    var sb strings.Builder
+    count := 0
+    sb.WriteString("{")
     for k := range s.elements {
-        builder.WriteString(k)
+        quotedString := strconv.Quote(k)
+        count++
+        if count == 1{
+            sb.WriteString(quotedString)
+        } else if count > 1 {
+            sb.WriteString(", " + quotedString)
+        }     
     }
-    builder.WriteString("}")
-    return builder.String()
+    sb.WriteString("}")
+    return sb.String()
 }
 
 func (s Set) IsEmpty() bool {
-    if len(s.elements) == 0 {
-        return true
-    }
-    return false
+    return len(s.elements) == 0
 }
 
 func (s Set) Has(elem string) bool {
-	panic("Please implement the Has function")
+    return s.elements[elem] == true
 }
 
 func (s Set) Add(elem string) {
-	panic("Please implement the Add function")
+    if !s.Has(elem) {
+        s.elements[elem] = true
+    }
 }
 
 func Subset(s1, s2 Set) bool {
-	panic("Please implement the Subset function")
+    for k := range s1.elements {
+        if !s2.Has(k) {
+            return false
+        }
+    }
+    return true
 }
 
 func Disjoint(s1, s2 Set) bool {
-	panic("Please implement the Disjoint function")
+    for k := range s1.elements {
+        if s2.Has(k) {
+            return false
+        }
+    }
+    return true
 }
 
 func Equal(s1, s2 Set) bool {
-	panic("Please implement the Equal function")
+    if len(s1.elements) != len(s2.elements) {
+        return false
+    }
+    for k := range s1.elements {
+        if !s2.Has(k) {
+            return false
+        }
+    }
+    return true
 }
 
 func Intersection(s1, s2 Set) Set {
-	panic("Please implement the Intersection function")
+    s3 := New()
+    for k := range s1.elements {
+        if s2.Has(k) {
+            s3.elements[k] = true
+        }
+    }
+    return s3
 }
 
 func Difference(s1, s2 Set) Set {
-	panic("Please implement the Difference function")
+    s3 := New()
+    for k := range s1.elements {
+        if !s2.Has(k) {
+            s3.elements[k] = true
+        }
+    }
+    return s3
 }
 
 func Union(s1, s2 Set) Set {
-	panic("Please implement the Union function")
+    s3 := New()
+    for k := range s1.elements {
+        s3.elements[k] = true
+    }
+    for k := range s2.elements {
+        s3.elements[k] = true
+    }
+    return s3
 }
