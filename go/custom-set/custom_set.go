@@ -1,5 +1,7 @@
 package stringset
 
+import "strings"
+
 // Implement Set as a collection of unique string values.
 //
 // For Set.String, use '{' and '}', output elements as double-quoted strings
@@ -8,21 +10,41 @@ package stringset
 // Format the empty set as {}.
 
 // Define the Set type here.
+type Set struct {
+    elements map[string]bool
+}
 
 func New() Set {
-	panic("Please implement the New function")
+    return Set{elements: make(map[string]bool)}
 }
 
 func NewFromSlice(l []string) Set {
-	panic("Please implement the NewFromSlice function")
+    mySet := New()
+    for _, v := range l {
+        mySet.elements[v] = true
+    }
+    return mySet
 }
 
+// muss schauen wie wir das machen
+// string muss { elment1, element2 } ausgeben
+// vielleicht len - 1 um die länge zu haben minus eins und so oft durch gehen 
+// mit einer schleife und letzte ist dann halt ohne komma
 func (s Set) String() string {
-	panic("Please implement the String function")
+    var builder strings.Builder
+    builder.WriteString("{")
+    for k := range s.elements {
+        builder.WriteString(k)
+    }
+    builder.WriteString("}")
+    return builder.String()
 }
 
 func (s Set) IsEmpty() bool {
-	panic("Please implement the IsEmpty function")
+    if len(s.elements) == 0 {
+        return true
+    }
+    return false
 }
 
 func (s Set) Has(elem string) bool {
